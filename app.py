@@ -11,31 +11,27 @@ from routes.posts import posts
 from routes.google_auth import google_auth
 
 
-print("📂 데이터베이스 파일 경로:", os.path.abspath("database.db"))
-
-# .env 파일 로드
+# ✅ 환경 변수 로드
 load_dotenv()
 
+# ✅ Flask 앱 설정
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")  # 세션 암호화 키
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 
-# JWT 설정 (비밀 키)
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")  
+# ✅ Supabase PostgreSQL 데이터베이스 설정
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# ✅ DB 및 JWT 초기화
+db = SQLAlchemy()
 jwt = JWTManager(app)
 
-# 데이터베이스 설정
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# SQLAlchemy 인스턴스 생성
-db = SQLAlchemy()
-
-from models import db, User, Post, init_db  # ✅ `init_db`도 가져오기
-
-# Flask 앱과 SQLAlchemy 연결
+# ✅ 모델 import 후 초기화
+from models import db, User, Post, init_db
 init_db(app)
 
-# 🚀 Flask 컨텍스트에서 DB 생성
+# ✅ Flask 컨텍스트에서 DB 생성
 with app.app_context():
     print("🚀 데이터베이스 테이블 생성 시작...")
     try:
@@ -44,18 +40,7 @@ with app.app_context():
     except Exception as e:
         print("❌ 데이터베이스 생성 실패:", str(e))
 
-# 환경 변수 로드
-load_dotenv()
 
-app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///database.db'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-
-# DB 및 JWT 초기화
-db.init_app(app)
-jwt = JWTManager(app)
 
 # ✅ 라우트 등록
 app.register_blueprint(kakao_auth)

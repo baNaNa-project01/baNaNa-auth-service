@@ -55,11 +55,11 @@ def kakao_callback():
 
     # 🚀 DB에 사용자 저장
     with db.session.begin():
-        user = User.query.filter_by(social_id=user_info["id"], provider="kakao").first()
+        user = User.query.filter_by(social_id=str(user_info["id"]), provider="kakao").first()
         if not user:
             user = User(
                 provider="kakao",
-                social_id=user_info["id"],
+                social_id=str(user_info["id"]),
                 name=user_info["kakao_account"]["profile"]["nickname"],
                 email=user_info["kakao_account"].get("email", "No Email")
             )
