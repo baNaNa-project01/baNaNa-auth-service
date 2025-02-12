@@ -4,6 +4,8 @@ import datetime
 from flask import Blueprint, redirect, request, jsonify
 from flask_jwt_extended import create_access_token
 from models import db, User
+from flask import Response
+import json
 
 # 🔹 Flask Blueprint 설정
 kakao_auth = Blueprint("kakao_auth", __name__)
@@ -66,7 +68,12 @@ def kakao_callback():
     # ✅ JWT 발급
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
 
-    return jsonify({
+    response_data = {
         "message": "카카오 로그인 성공",
         "token": jwt_token
-    })
+    }
+
+    return Response(
+        json.dumps(response_data, ensure_ascii=False),  # `ensure_ascii=False` 추가
+        content_type="application/json; charset=utf-8"
+    )

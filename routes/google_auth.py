@@ -4,6 +4,8 @@ import datetime
 from flask import Blueprint, redirect, request, jsonify
 from flask_jwt_extended import create_access_token
 from models import db, User
+from flask import Response
+import json
 
 google_auth = Blueprint("google_auth", __name__)
 
@@ -55,4 +57,13 @@ def google_callback():
             
 
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
-    return jsonify({"message": "구글 로그인 성공", "token": jwt_token})
+
+    response_data = {
+        "message": "구글 로그인 성공", 
+        "token": jwt_token
+    }
+
+    return Response(
+        json.dumps(response_data, ensure_ascii=False),  # `ensure_ascii=False` 추가
+        content_type="application/json; charset=utf-8"
+    )
