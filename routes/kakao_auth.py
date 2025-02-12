@@ -67,6 +67,6 @@ def kakao_callback():
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
 
     return jsonify({
-        "message": "로그인 성공",
+        "message": "카카오 로그인 성공",
         "token": jwt_token
     })

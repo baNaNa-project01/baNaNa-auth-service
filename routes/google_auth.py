@@ -42,7 +42,7 @@ def google_callback():
     user_response = requests.get(GOOGLE_USER_INFO_URL, headers=headers)
     user_info = user_response.json()
 
-    with session:
+    with db.session.begin():
         user = User.query.filter_by(social_id=user_info["id"], provider="google").first()
         if not user:
             user = User(
@@ -52,8 +52,7 @@ def google_callback():
                 email=user_info.get("email", "No Email")
             )
             db.session.add(user)
-            db.session.commit()
-            db.session.refresh(user)
+            
 
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
     return jsonify({"message": "구글 로그인 성공", "token": jwt_token})
