@@ -20,8 +20,10 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 
 # ✅ Supabase PostgreSQL 데이터베이스 설정
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL")
+#app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL").replace("5432", "6543")
+
 
 # ✅ DB 및 JWT 초기화
 db = SQLAlchemy()
