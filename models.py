@@ -20,3 +20,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('posts', lazy=True))
+    image_url = db.Column(db.String(255))  # 이미지 URL 추가
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+
