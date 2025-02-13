@@ -5,17 +5,18 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from models import db, init_db
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_cors import CORS
 
 from routes.kakao_auth import kakao_auth
 from routes.posts import posts
 from routes.google_auth import google_auth
-
 
 # ✅ 환경 변수 로드
 load_dotenv()
 
 # ✅ Flask 앱 설정
 app = Flask(__name__)
+CORS(app)  
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 
