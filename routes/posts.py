@@ -66,11 +66,22 @@ def get_posts():
 # ✅ 특정 게시글 조회
 @posts.route("/post/<int:post_id>", methods=["GET"])
 def get_post(post_id):
-    """특정 게시글 조회"""
     post = Post.query.get(post_id)
+    
     if not post:
         return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
-    return jsonify({"id": post.id, "title": post.title, "content": post.content, "author": post.user.name})
+
+    author_name = post.user.name if post.user else "Unknown"
+
+    return jsonify({
+        "id": post.id,
+        "title": post.title,
+        "content": post.content,
+        "image_url": post.image_url,
+        "created_at": post.created_at,
+        "author": author_name
+    })
+
 
 
 # ✅ 게시글 삭제 (JWT 필요)
