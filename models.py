@@ -23,7 +23,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('posts', lazy=True))
     image_url = db.Column(db.String(255))  # 이미지 URL 추가
-    created_at = db.Column(db.DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

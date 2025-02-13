@@ -10,6 +10,7 @@ from flask_cors import CORS
 from routes.kakao_auth import kakao_auth
 from routes.posts import posts
 from routes.google_auth import google_auth
+from routes.comments import comments
 
 # ✅ 환경 변수 로드
 load_dotenv()
@@ -49,6 +50,7 @@ with app.app_context():
 app.register_blueprint(kakao_auth)
 app.register_blueprint(posts)
 app.register_blueprint(google_auth)
+app.register_blueprint(comments)
 
 # ✅ 사용자 정보 확인 (JWT 필요)
 @app.route("/profile", methods=["GET"])
