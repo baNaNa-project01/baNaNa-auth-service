@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from models import db, init_db
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
+from flasgger import Swagger
 
 from routes.kakao_auth import kakao_auth
 from routes.posts import posts
@@ -18,6 +19,7 @@ load_dotenv()
 # ✅ Flask 앱 설정
 app = Flask(__name__)
 CORS(app)  
+swagger = Swagger(app)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 
@@ -56,7 +58,26 @@ app.register_blueprint(comments)
 @app.route("/profile", methods=["GET"])
 @jwt_required()
 def profile():
-    """현재 로그인된 사용자 정보 반환"""
+    """
+    현재 로그인된 사용자 정보 반환
+    ---
+    tags:
+      - User
+    security:
+      - Bearer: []
+    responses:
+      200:
+        description: 사용자 정보 조회 성공
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            user_info:
+              type: string
+      401:
+        description: 인증 실패
+    """
     current_user = get_jwt_identity()
     return jsonify({
         "message": "사용자 정보 조회 성공",
@@ -67,8 +88,26 @@ def profile():
 @app.route("/logout")
 @jwt_required()
 def logout():
-    """클라이언트에서 JWT 삭제하면 로그아웃 완료"""
-    return jsonify({"message": "JWT 기반이므로 클라이언트에서 토큰을 삭제하세요."})
+    """
+    로그아웃 엔드포인트
+    클라이언트에서 JWT를 삭제하면 로그아웃 처리됩니다.
+    ---
+    tags:
+      - User
+    security:
+      - Bearer: []
+    responses:
+      200:
+        description: 로그아웃 성공 메시지 반환
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      401:
+        description: 인증 실패
+    """
+    return jsonify({"message": "로그아웃 성공, JWT 기반이므로 클라이언트에서 토큰을 삭제하세요."})
 
 # 서버 실행
 if __name__ == "__main__":
