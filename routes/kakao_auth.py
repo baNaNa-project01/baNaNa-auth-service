@@ -19,6 +19,8 @@ KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize"
 KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token"
 KAKAO_USER_URL = "https://kapi.kakao.com/v2/user/me"
 
+FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.html")
+
 
 # ✅ 1️⃣ Kakao 로그인 (JWT 발급)
 @kakao_auth.route("/login/kakao")
@@ -68,12 +70,15 @@ def kakao_callback():
     # ✅ JWT 발급
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
 
-    response_data = {
-        "message": "카카오 로그인 성공",
-        "token": jwt_token
-    }
-
-    return Response(
-        json.dumps(response_data, ensure_ascii=False),  # `ensure_ascii=False` 추가
-        content_type="application/json; charset=utf-8"
+    # ✅ HttpOnly 쿠키에 JWT 토큰 저장
+    response = redirect(FRONT_PAGE_URL)
+    # max_age는 초 단위이며, secure=True는 HTTPS 사용 시에만 전송됩니다.
+    response.set_cookie(
+        "access_token", 
+        jwt_token, 
+        httponly=True, 
+        secure=True, 
+        samesite="Lax", 
+        max_age=3600  # 1시간
     )
+    return response
