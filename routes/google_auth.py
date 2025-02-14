@@ -23,6 +23,16 @@ FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.
 
 @google_auth.route("/login/google")
 def login_google():
+    """
+    구글 로그인 시작 엔드포인트
+    사용자를 구글 로그인 페이지로 리다이렉트합니다.
+    ---
+    tags:
+      - Authentication
+    responses:
+      302:
+        description: 구글 로그인 페이지로 리다이렉트합니다.
+    """
     google_login_url = (
         f"{GOOGLE_AUTH_URL}?client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}"
         f"&response_type=code&scope=openid%20email%20profile"
@@ -31,6 +41,25 @@ def login_google():
 
 @google_auth.route("/login/google/callback")
 def google_callback():
+    """
+    구글 로그인 콜백 엔드포인트
+    구글에서 전달받은 authorization code를 사용하여 JWT를 발급하고,
+    HttpOnly 쿠키에 토큰을 저장한 후 프론트엔드 페이지로 리다이렉트합니다.
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - name: code
+        in: query
+        type: string
+        required: true
+        description: 구글에서 전달받은 authorization code
+    responses:
+      302:
+        description: 로그인 성공 후 프론트엔드 페이지로 리다이렉트합니다.
+      400:
+        description: "구글 로그인 실패 (예: access_token 미발급)"
+    """
     code = request.args.get("code")
     token_data = {
         "code": code,
