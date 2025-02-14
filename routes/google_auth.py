@@ -18,6 +18,9 @@ GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
 GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo"
 
+FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.html")
+
+
 @google_auth.route("/login/google")
 def login_google():
     google_login_url = (
@@ -58,12 +61,15 @@ def google_callback():
 
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
 
-    response_data = {
-        "message": "구글 로그인 성공", 
-        "token": jwt_token
-    }
-
-    return Response(
-        json.dumps(response_data, ensure_ascii=False),  # `ensure_ascii=False` 추가
-        content_type="application/json; charset=utf-8"
+    # ✅ HttpOnly 쿠키에 JWT 토큰 저장
+    response = redirect(FRONT_PAGE_URL)
+    # max_age는 초 단위이며, secure=True는 HTTPS 사용 시에만 전송됩니다.
+    response.set_cookie(
+        "access_token", 
+        jwt_token, 
+        httponly=True, 
+        secure=True, 
+        samesite="Lax", 
+        max_age=3600  # 1시간
     )
+    return response 
