@@ -19,7 +19,23 @@ load_dotenv()
 # ✅ Flask 앱 설정
 app = Flask(__name__)
 CORS(app)  
-swagger = Swagger(app)
+
+swagger_template = {
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT 토큰을 입력하세요. 예: Bearer {token}"
+        }
+    },
+    "security": [
+        {"Bearer": []}
+    ]
+}
+
+swagger = Swagger(app, template=swagger_template)
+
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 
