@@ -25,6 +25,16 @@ FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.
 # ✅ 1️⃣ Kakao 로그인 (JWT 발급)
 @kakao_auth.route("/login/kakao")
 def login_kakao():
+    """
+    카카오 로그인 시작 엔드포인트
+    사용자를 카카오 로그인 페이지로 리다이렉트합니다.
+    ---
+    tags:
+      - Authentication
+    responses:
+      302:
+        description: 카카오 로그인 페이지로 리다이렉트합니다.
+    """
     kakao_login_url = (
         f"{KAKAO_AUTH_URL}?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_REDIRECT_URI}&response_type=code"
     )
@@ -33,7 +43,25 @@ def login_kakao():
 
 @kakao_auth.route("/login/kakao/callback")
 def kakao_callback():
-    """카카오 로그인 후 JWT 발급"""
+    """
+    카카오 로그인 콜백 엔드포인트
+    카카오에서 전달받은 authorization code를 사용하여 JWT를 발급하고,
+    HttpOnly 쿠키에 토큰을 저장한 후 프론트엔드 페이지로 리다이렉트합니다.
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - name: code
+        in: query
+        type: string
+        required: true
+        description: 카카오에서 전달받은 authorization code
+    responses:
+      302:
+        description: 로그인 성공 후 프론트엔드 페이지로 리다이렉트합니다.
+      400:
+        description: "카카오 로그인 실패 (예: access_token 미발급)"
+    """
     code = request.args.get("code")
     token_data = {
         "grant_type": "authorization_code",
