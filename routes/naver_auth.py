@@ -22,6 +22,15 @@ FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.
 # ✅ 네이버 로그인 페이지로 이동
 @naver_auth.route("/login/naver")
 def login_naver():
+    """
+    네이버 로그인 페이지로 이동
+    ---
+    tags:
+      - Authentication
+    responses:
+      302:
+        description: 네이버 로그인 페이지로 리다이렉트 합니다.
+    """
     state = os.urandom(16).hex()  # CSRF 방지용 상태값
     session["naver_state"] = state  # 세션에 저장
 
@@ -37,7 +46,28 @@ def login_naver():
 # ✅ 네이버 로그인 콜백
 @naver_auth.route("/login/naver/callback")
 def naver_callback():
-    """네이버 로그인 후 JWT 발급"""
+    """
+    네이버 로그인 후 JWT 발급
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - name: code
+        in: query
+        type: string
+        required: true
+        description: 네이버로부터 전달받은 인증 코드
+      - name: state
+        in: query
+        type: string
+        required: true
+        description: CSRF 방지를 위한 상태 값 (세션에 저장된 값과 일치해야 함)
+    responses:
+      302:
+        description: JWT 발급 후 HttpOnly 쿠키에 JWT를 저장하고 프론트엔드로 리다이렉트 합니다.
+      400:
+        description: CSRF 검증 실패, 네이버 로그인 실패 또는 사용자 정보 조회 실패
+    """
     code = request.args.get("code")
     state = request.args.get("state")
 
