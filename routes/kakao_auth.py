@@ -37,7 +37,6 @@ def login_kakao():
       302:
         description: 카카오 로그인 페이지로 리다이렉트합니다.
     """
-    # 현재 접속한 프론트엔드 주소 확인 (로컬 또는 배포 환경에 따라 다르게 처리)
     kakao_login_url = (
         f"{KAKAO_AUTH_URL}?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_REDIRECT_URI}&response_type=code"
     )
@@ -46,7 +45,7 @@ def login_kakao():
 
 
 @kakao_auth.route("/login/kakao/callback")
-@cross_origin
+@cross_origin()
 def kakao_callback():
     """
     카카오 로그인 콜백 엔드포인트
