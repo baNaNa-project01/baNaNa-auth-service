@@ -93,15 +93,4 @@ def google_callback():
 
     jwt_token = create_access_token(identity=str(user.id), expires_delta=datetime.timedelta(hours=1))
 
-    # ✅ HttpOnly 쿠키에 JWT 토큰 저장
-    response = redirect(FRONT_PAGE_URL)
-    # max_age는 초 단위이며, secure=True는 HTTPS 사용 시에만 전송됩니다.
-    response.set_cookie(
-        "access_token", 
-        jwt_token, 
-        httponly=True, 
-        secure=True, 
-        samesite="None", 
-        max_age=3600  # 1시간
-    )
-    return response 
+    return jsonify({"message": "카카오 로그인 성공", "token": jwt_token, "user": {"name": user.name, "email": user.email}})
