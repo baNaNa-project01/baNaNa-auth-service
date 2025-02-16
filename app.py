@@ -44,6 +44,10 @@ app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 #app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL").replace("5432", "6543")
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,  # 🛠 DB 연결이 끊겼는지 확인 후 자동으로 다시 연결
+    "pool_recycle": 1800,   # ⏳ 30분마다 연결을 새로고침
+}
 
 
 # ✅ DB 및 JWT 초기화
