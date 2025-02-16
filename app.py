@@ -13,6 +13,7 @@ from routes.posts import posts
 from routes.google_auth import google_auth
 from routes.comments import comments
 from routes.naver_auth import naver_auth
+from routes.auth import auth
 
 # ✅ 환경 변수 로드
 load_dotenv()
@@ -75,6 +76,7 @@ app.register_blueprint(posts)
 app.register_blueprint(google_auth)
 app.register_blueprint(comments)
 app.register_blueprint(naver_auth)
+app.register_blueprint(auth)
 
 # ✅ 사용자 정보 확인 (JWT 필요)
 @app.route("/profile", methods=["GET"])
