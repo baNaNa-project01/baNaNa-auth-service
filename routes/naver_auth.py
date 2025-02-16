@@ -119,5 +119,6 @@ def naver_callback():
     # ✅ JWT 발급
     jwt_token = create_access_token(identity=str(user.id))
 
-    return jsonify({"message": "카카오 로그인 성공", "token": jwt_token, "user": {"name": user.name, "email": user.email}})
-
+    # ✅ HttpOnly 쿠키 대신, URL 파라미터로 `token` 포함해서 프론트엔드 리다이렉트
+    redirect_url = f"{FRONT_PAGE_URL}?token={jwt_token}"
+    return redirect(redirect_url)
