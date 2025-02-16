@@ -6,6 +6,7 @@ from flask_jwt_extended import create_access_token
 from models import db, User
 from flask import Response
 import json
+from flask_cors import cross_origin
 
 google_auth = Blueprint("google_auth", __name__)
 
@@ -22,6 +23,7 @@ FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "https://banana-project01.github.io/
 
 
 @google_auth.route("/login/google")
+@cross_origin()
 def login_google():
     """
     구글 로그인 시작 엔드포인트
@@ -40,6 +42,7 @@ def login_google():
     return redirect(google_login_url)
 
 @google_auth.route("/login/google/callback")
+@cross_origin()
 def google_callback():
     """
     구글 로그인 콜백 엔드포인트
