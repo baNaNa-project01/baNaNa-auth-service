@@ -131,6 +131,11 @@ def logout():
     """
     return jsonify({"message": "로그아웃 성공, JWT 기반이므로 클라이언트에서 토큰을 삭제하세요."})
 
+@app.route("/health")
+def health_check():
+    return "OK", 200
+
+
 # 서버 실행
 if __name__ == "__main__":
     app.run(debug=True)
