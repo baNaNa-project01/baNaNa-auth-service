@@ -101,7 +101,7 @@ def google_callback():
         jwt_token, 
         httponly=True, 
         secure=True, 
-        samesite="Lax", 
+        samesite="None", 
         max_age=3600  # 1시간
     )
     return response 
