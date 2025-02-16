@@ -20,7 +20,7 @@ KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize"
 KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token"
 KAKAO_USER_URL = "https://kapi.kakao.com/v2/user/me"
 
-FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5001/login/kakao/callback")
+FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5501/login/kakao/callback")
 
 
 # ✅ 1️⃣ Kakao 로그인 (JWT 발급)
