@@ -19,7 +19,7 @@ load_dotenv()
 
 # ✅ Flask 앱 설정
 app = Flask(__name__)
-CORS(app)  
+CORS(app, supports_credentials=True)  
 
 swagger_template = {
     "securityDefinitions": {

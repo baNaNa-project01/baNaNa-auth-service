@@ -6,6 +6,7 @@ from flask_jwt_extended import create_access_token
 from models import db, User
 from flask import Response
 import json
+from flask_cors import cross_origin
 
 # 🔹 Flask Blueprint 설정
 kakao_auth = Blueprint("kakao_auth", __name__)
@@ -24,6 +25,7 @@ FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "https://banana-project01.github.io/
 
 # ✅ 1️⃣ Kakao 로그인 (JWT 발급)
 @kakao_auth.route("/login/kakao")
+@cross_origin()
 def login_kakao():
     """
     카카오 로그인 시작 엔드포인트
