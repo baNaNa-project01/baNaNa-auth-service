@@ -16,7 +16,7 @@ NAVER_AUTH_URL = "https://nid.naver.com/oauth2.0/authorize"
 NAVER_TOKEN_URL = "https://nid.naver.com/oauth2.0/token"
 NAVER_USER_URL = "https://openapi.naver.com/v1/nid/me"
 
-FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.html")
+FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "https://banana-project01.github.io/baNaNa-frontend/")
 
 
 # ✅ 네이버 로그인 페이지로 이동

@@ -18,7 +18,7 @@ GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
 GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo"
 
-FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.html")
+FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "https://banana-project01.github.io/baNaNa-frontend/")
 
 
 @google_auth.route("/login/google")

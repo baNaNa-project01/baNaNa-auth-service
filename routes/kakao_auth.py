@@ -19,7 +19,7 @@ KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize"
 KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token"
 KAKAO_USER_URL = "https://kapi.kakao.com/v2/user/me"
 
-FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "http://127.0.0.1:5500/baNaNa/index.html")
+FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "https://banana-project01.github.io/baNaNa-frontend/")
 
 
 # ✅ 1️⃣ Kakao 로그인 (JWT 발급)
