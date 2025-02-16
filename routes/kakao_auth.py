@@ -7,6 +7,7 @@ from models import db, User
 from flask import Response
 import json
 from flask_cors import cross_origin
+import uuid  
 
 # 🔹 Flask Blueprint 설정
 kakao_auth = Blueprint("kakao_auth", __name__)
@@ -92,11 +93,16 @@ def kakao_callback():
     with db.session.begin():
         user = User.query.filter_by(social_id=str(user_info["id"]), provider="kakao").first()
         if not user:
+             # ✅ 이메일이 없는 경우 'No Email' 대신 고유한 값으로 변경
+            user_email = user_info["kakao_account"].get("email", None)
+            if not user_email:
+                user_email = f"kakao_{user_info['id']}@kakao.com"  # ✅ 카카오 ID 기반 이메일 생성
+
             user = User(
                 provider="kakao",
                 social_id=str(user_info["id"]),
                 name=user_info["kakao_account"]["profile"]["nickname"],
-                email=user_info["kakao_account"].get("email", "No Email")
+                email=user_email
             )
             db.session.add(user)
 
