@@ -4,6 +4,7 @@ import requests
 from flask import Blueprint, redirect, request, jsonify, session
 from flask_jwt_extended import create_access_token
 from models import db, User
+from flask_cors import cross_origin
 
 naver_auth = Blueprint("naver_auth", __name__)
 
@@ -21,6 +22,7 @@ FRONT_PAGE_URL= os.getenv("FRONT_PAGE_URL", "https://banana-project01.github.io/
 
 # ✅ 네이버 로그인 페이지로 이동
 @naver_auth.route("/login/naver")
+@cross_origin()
 def login_naver():
     """
     네이버 로그인 페이지로 이동
@@ -45,6 +47,7 @@ def login_naver():
 
 # ✅ 네이버 로그인 콜백
 @naver_auth.route("/login/naver/callback")
+@cross_origin()
 def naver_callback():
     """
     네이버 로그인 후 JWT 발급
