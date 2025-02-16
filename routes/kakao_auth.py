@@ -37,9 +37,14 @@ def login_kakao():
       302:
         description: 카카오 로그인 페이지로 리다이렉트합니다.
     """
+    # 현재 접속한 프론트엔드 주소 확인 (로컬 또는 배포 환경에 따라 다르게 처리)
+    referer = request.headers.get("Referer", FRONT_PAGE_URL)
+    kakao_redirect_uri = f"{referer}login/kakao/callback" if "127.0.0.1" in referer else KAKAO_REDIRECT_URI
+
     kakao_login_url = (
-        f"{KAKAO_AUTH_URL}?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_REDIRECT_URI}&response_type=code"
+        f"{KAKAO_AUTH_URL}?client_id={KAKAO_CLIENT_ID}&redirect_uri={kakao_redirect_uri}&response_type=code"
     )
+    print(f"✅ Redirecting to Kakao: {kakao_login_url}")  # 디버깅용 로그
     return redirect(kakao_login_url)
 
 
