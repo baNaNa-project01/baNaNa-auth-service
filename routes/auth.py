@@ -7,7 +7,46 @@ auth = Blueprint("auth", __name__)
 @auth.route("/auth/me", methods=["GET"])
 @jwt_required()  # ✅ JWT 인증 추가 (토큰 검증)
 def get_current_user():
-    """ 현재 로그인한 사용자 정보 반환 """
+    """
+    현재 로그인한 사용자 정보 반환
+
+    ---
+    tags:
+      - Authentication
+    security:
+      - Bearer: []
+    responses:
+      200:
+        description: 로그인한 사용자의 정보 반환
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: 사용자 ID
+            name:
+              type: string
+              description: 사용자 이름
+            email:
+              type: string
+              description: 사용자 이메일 (없는 경우 "No Email" 반환)
+      401:
+        description: 인증 실패 (유효하지 않은 JWT 토큰)
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              description: "토큰 검증 실패"
+      404:
+        description: 사용자를 찾을 수 없음
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              description: "사용자를 찾을 수 없습니다."
+    """
 
     try:
         user_id = get_jwt_identity()  # ✅ JWT에서 사용자 ID 추출
