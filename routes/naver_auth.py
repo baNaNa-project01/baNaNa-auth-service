@@ -5,6 +5,7 @@ from flask import Blueprint, redirect, request, jsonify, session
 from flask_jwt_extended import create_access_token
 from models import db, User
 from flask_cors import cross_origin
+import urllib.parse
 
 naver_auth = Blueprint("naver_auth", __name__)
 
@@ -36,10 +37,11 @@ def login_naver():
     state = os.urandom(16).hex()  # CSRF 방지용 상태값
     session["naver_state"] = state  # 세션에 저장
 
+    encoded_redirect_uri = urllib.parse.quote(NAVER_REDIRECT_URI, safe='')
     naver_login_url = (
         f"{NAVER_AUTH_URL}?response_type=code"
         f"&client_id={NAVER_CLIENT_ID}"
-        f"&redirect_uri={NAVER_REDIRECT_URI}"
+        f"&redirect_uri={encoded_redirect_uri}"
         f"&state={state}"
     )
     print("네이버 로그인 URL: ", naver_login_url)
