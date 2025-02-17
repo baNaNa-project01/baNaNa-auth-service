@@ -42,6 +42,7 @@ def login_naver():
         f"&redirect_uri={NAVER_REDIRECT_URI}"
         f"&state={state}"
     )
+    print("네이버 로그인 URL: ", naver_login_url)
     return redirect(naver_login_url)
 
 
